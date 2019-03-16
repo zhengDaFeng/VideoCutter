@@ -1,0 +1,9 @@
+C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\bin\Debug\VideoCutter.exe.config
+C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\bin\Debug\VideoCutter.exe
+C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\bin\Debug\VideoCutter.pdb
+C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\obj\Debug\VideoCutter.Form1.resources
+C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\obj\Debug\VideoCutter.Properties.Resources.resources
+C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\obj\Debug\VideoCutter.csproj.GenerateResource.cache
+C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\obj\Debug\VideoCutter.csproj.CoreCompileInputs.cache
+C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\obj\Debug\VideoCutter.exe
+C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\obj\Debug\VideoCutter.pdb
