@@ -7,3 +7,12 @@ C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\obj\Release\VideoCutter.cspr
 C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\obj\Release\VideoCutter.csproj.CoreCompileInputs.cache
 C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\obj\Release\VideoCutter.exe
 C:\Users\Cheng\source\repos\VideoCutter\VideoCutter\obj\Release\VideoCutter.pdb
+E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\bin\Release\VideoCutter.exe.config
+E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\bin\Release\VideoCutter.exe
+E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\bin\Release\VideoCutter.pdb
+E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\obj\Release\VideoCutter.Form1.resources
+E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\obj\Release\VideoCutter.Properties.Resources.resources
+E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\obj\Release\VideoCutter.csproj.GenerateResource.cache
+E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\obj\Release\VideoCutter.csproj.CoreCompileInputs.cache
+E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\obj\Release\VideoCutter.exe
+E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\obj\Release\VideoCutter.pdb
