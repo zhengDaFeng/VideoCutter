@@ -86,6 +86,8 @@ namespace VideoCutter
             textBox5.Text = DefaultDurationTime;
         }
 
+        #region UI 事件
+
         private void button1_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -93,7 +95,6 @@ namespace VideoCutter
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     strFFMPEG = openFileDialog.FileName;
-                    //textBox1.Text = strFFMPEG;
                 }
             }
         }
@@ -105,12 +106,6 @@ namespace VideoCutter
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     strINPUT = openFileDialog.FileNames;
-                    //textBox2.Text = "";
-                    //foreach (var item in strINPUT)
-                    //{
-                    //    textBox2.Text += item;
-                    //    textBox2.Text += "; ";
-                    //}
                 }
             }
         }
@@ -123,13 +118,12 @@ namespace VideoCutter
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     strOUTPUT = saveFileDialog.FileName;
-                    //textBox3.Text = strOUTPUT;
                 }
             }
         }
 
         /// <summary>
-        /// 剪切按钮 - 点击事件
+        /// 剪切按钮：点击事件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -187,6 +181,8 @@ namespace VideoCutter
             var cmd = string.Format($"{strFFMPEG} -f concat -i {listfile} -c copy {strOUTPUT}");
             ExecutCmdProcess(cmd);
         }
+
+        #endregion
 
         private void ExecutCmdProcess(string cmd)
         {
