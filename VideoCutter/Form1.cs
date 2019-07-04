@@ -22,7 +22,8 @@ namespace VideoCutter
         private const string DefaultDurationTime = "00:00:00";
         #endregion
 
-        #region Bind UI
+        #region Properties
+
         public string strFFMPEG
         {
             get { return textBox1.Text; }
@@ -61,7 +62,10 @@ namespace VideoCutter
             get { return checkBox1.Checked; }
             set { checkBox1.Checked = value; }
         }
+
         #endregion
+
+        #region 构造函数
 
         public Form1()
         {
@@ -86,7 +90,9 @@ namespace VideoCutter
             textBox5.Text = DefaultDurationTime;
         }
 
-        #region UI 事件
+        #endregion
+
+        #region Button Click Event
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -184,6 +190,8 @@ namespace VideoCutter
 
         #endregion
 
+        #region Private Method
+
         private void ExecutCmdProcess(string cmd)
         {
             using (Process CommandProcess = new Process())
@@ -239,5 +247,7 @@ namespace VideoCutter
 
             return flag;
         }
+
+        #endregion
     }
 }
