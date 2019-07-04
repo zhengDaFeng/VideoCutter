@@ -14,143 +14,154 @@ namespace VideoCutter
 {
     public partial class Form1 : Form
     {
-        #region TextBox Default Value
-        private const string DefaultFfmpegFile = @"D:\ffmpeg\ffmpeg.exe";
-        private const string DefaultInputFile = @"D:\ffmpeg\test1.mp4;D:\ffmpeg\test2.mp4";
-        private const string DefaultOutputFile = @"D:\ffmpeg\test3.mp4";
-        private const string DefaultStartTime = "00:00:00";
-        private const string DefaultDurationTime = "00:00:00";
+        #region Default
+
+
+
         #endregion
 
         #region Properties
 
-        public string strFFMPEG
-        {
-            get { return textBox1.Text; }
-            set { textBox1.Text = value; }
-        }
-        public string[] strINPUT
-        {
-            get { return textBox2.Text.Trim().Split(';'); }
-            set
-            {
-                textBox2.Text = "";
-                foreach (var item in value)
-                {
-                    textBox2.Text += item;
-                    textBox2.Text += "; ";
-                }
-            }
-        }
-        public string strOUTPUT
-        {
-            get { return textBox3.Text; }
-            set { textBox3.Text = value; }
-        }
-        public string strTimeStart
-        {
-            get { return textBox4.Text; }
-            set { textBox4.Text = value; }
-        }
-        public string strTimeSpan
-        {
-            get { return textBox5.Text; }
-            set { textBox5.Text = value; }
-        }
-        public bool IsShowCmdWnd
-        {
-            get { return checkBox1.Checked; }
-            set { checkBox1.Checked = value; }
-        }
+
 
         #endregion
 
-        #region 构造函数
+        #region Constructor
 
         public Form1()
         {
             InitializeComponent();
-
-            //textBox1.Enabled = false;
-            //textBox2.Enabled = false;
-            //textBox3.Enabled = false;
-#if DEBUG
-            strFFMPEG = DefaultFfmpegFile;
-            strINPUT = new string[1] { DefaultInputFile };
-            strOUTPUT = DefaultOutputFile;
-            textBox1.Text = DefaultFfmpegFile;
-            textBox2.Text = DefaultInputFile;
-            textBox3.Text = DefaultOutputFile;
-#else
-            textBox1.Text = "请选择核心文件ffmpeg.exe";
-            textBox2.Text = "请选择预剪辑的视频文件";
-            textBox3.Text = "请选择已剪辑的视频文件";
-#endif
-            textBox4.Text = DefaultStartTime;
-            textBox5.Text = DefaultDurationTime;
         }
 
         #endregion
 
-        #region Button Click Event
+        #region Button Click
 
-        private void button1_Click(object sender, EventArgs e)
+        private void BtnBrowseFfmpeg_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    strFFMPEG = openFileDialog.FileName;
+                    TxtFfmpegFile.Text = openFileDialog.FileName;
                 }
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void BtnClipBrowseInput_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    strINPUT = openFileDialog.FileNames;
+                    TxtClipInputFile.Text = openFileDialog.FileName;
                 }
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void BtnClipBrowseOutput_Click(object sender, EventArgs e)
         {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            if (!CheckFile(TxtClipInputFile.Text))
             {
-                saveFileDialog.Filter = "mp4 files (*.mp4)|*.mp4|All files (*.*)|*.*";
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                return;
+            }
+
+            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
+            {
+                folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
                 {
-                    strOUTPUT = saveFileDialog.FileName;
+                    var folder = folderBrowserDialog.SelectedPath;
+                    var nameOld = Path.GetFileNameWithoutExtension(TxtClipInputFile.Text);
+                    var nameNew = TxtClipInputFile.Text.Replace(nameOld, nameOld + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "_clip");
+                    TxtClipOutputFile.Text = Path.Combine(folder, nameNew);
                 }
             }
         }
 
         /// <summary>
-        /// 剪切按钮：点击事件
+        /// 剪辑视频
+        /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button4_Click(object sender, EventArgs e)
+        private void BtnClipVideo_Click(object sender, EventArgs e)
         {
-            if (!IsPathCorrect(strFFMPEG) ||
-                !IsPathCorrect(strINPUT[0]) ||
-                !IsPathCorrect(strOUTPUT) || 
-                !IsTimeStringCorrect(strTimeStart) ||
-                !IsTimeStringCorrect(strTimeSpan))
+            if (!CheckFile(TxtFfmpegFile.Text) || !CheckFile(TxtClipInputFile.Text))
             {
                 return;
             }
 
-            DateTime start = DateTime.Parse(strTimeStart.Trim());
-            DateTime end = DateTime.Parse(strTimeSpan.Trim());
-            TimeSpan span = end - start;
+            DateTime startTime = DateTime.Parse($"{NudStartHour.Value.ToString("00")}:" +
+                $"{NudStartMinute.Value.ToString("00")}:{NudStartSecond.Value.ToString("00")}");
+            DateTime endTime = DateTime.Parse($"{NudEndHour.Value.ToString("00")}:" +
+                $"{NudEndMinute.Value.ToString("00")}:{NudEndSecond.Value.ToString("00")}");
+            TimeSpan spanTime = endTime - startTime;
 
-            string strCmd = string.Format($"{strFFMPEG} -ss {strTimeStart} -t {span.ToString()} -i {strINPUT[0]} -vcodec copy -acodec copy {strOUTPUT}");
+            if (spanTime.TotalSeconds <= 0)
+            {
+                MessageBox.Show("End-time must be bigger than start-time!");
+                return;
+            }
 
+            progressBar2.Maximum = (int)spanTime.TotalSeconds;
+
+            var start = startTime.ToString("HH:mm:ss");
+            var span = spanTime.ToString();
+            
+            var strCmd = string.Format($"{TxtFfmpegFile.Text} -ss {start} -t {span} " +
+                $"-i {TxtClipInputFile.Text} -vcodec copy -acodec copy {TxtClipOutputFile.Text}");
             ExecutCmdProcess(strCmd);
+        }
+
+        private void BtnMergeBrowseInput_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Multiselect = true;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string[] files = openFileDialog.FileNames;
+                    TxtMergeInputFile.Text = "";
+                    foreach (var item in files)
+                    {
+                        TxtMergeInputFile.Text += item;
+                        TxtMergeInputFile.Text += ";\r\n";
+                    }
+                }
+            }
+        }
+
+        private void BtnMergeAddInput_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string[] files = openFileDialog.FileNames;
+                    foreach (var item in files)
+                    {
+                        TxtMergeInputFile.Text += item;
+                        TxtMergeInputFile.Text += "; ";
+                    }
+                }
+            }
+        }
+
+        private void BtnMergeBrowseOutput_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
+            {
+                folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var folder = folderBrowserDialog.SelectedPath;
+                    var first = TxtMergeInputFile.Text.Replace("\r\n", "").Split(';')[0];
+                    var nameOld = Path.GetFileNameWithoutExtension(first);
+                    var nameNew = first.Replace(nameOld, nameOld + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "_merge");
+                    TxtMergeOutputFile.Text = Path.Combine(folder, nameNew);
+                }
+            }
         }
 
         /// <summary>
@@ -158,39 +169,59 @@ namespace VideoCutter
         /// 命令格式：ffmpeg -i "concat:input1.mpg|input2.mpg|input3.mpg" -c copy output.mpg
         /// 已知问题：必需在同一文件夹内
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void button5_Click(object sender, EventArgs e)
+        private void BtnMergeVideo_Click(object sender, EventArgs e)
         {
-            if (!IsPathCorrect(strFFMPEG) ||
-                !IsPathCorrect(strINPUT[0]) ||
-                !IsPathCorrect(strOUTPUT))
-            {
-                return;
-            }
-            
+            var files = TxtMergeInputFile.Text.Replace("\r\n", "").Split(';');
             var temp = "";
-            var length = strINPUT.Count();
-            for (int i = 0; i < length; i++)
+            foreach (var item in files)
             {
-                temp += "file " + Path.GetFileName(strINPUT[i]) + "\r\n";
+                if (item != "")
+                {
+                    temp += "file " + item + "\r\n";
+                }
             }
 
-            var listfile = string.Format(Path.Combine(Path.GetDirectoryName(strINPUT[0]), "list.txt"));
-            using (StreamWriter sw = new StreamWriter(listfile, false))
+            var listfile = string.Format(Path.Combine(Path.GetDirectoryName(files[0]), "list.txt"));
+            try
             {
-                sw.Write(temp);
-                sw.Flush();
-                sw.Close();
+                using (StreamWriter sw = new StreamWriter(listfile, false))
+                {
+                    sw.Write(temp);
+                    sw.Flush();
+                    sw.Close();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
-            var cmd = string.Format($"{strFFMPEG} -f concat -i {listfile} -c copy {strOUTPUT}");
+            progressBar2.Maximum = 200;
+
+            var cmd = string.Format($"{TxtFfmpegFile.Text} -f concat -safe 0 -i {listfile} -c copy {TxtMergeOutputFile.Text}");
             ExecutCmdProcess(cmd);
         }
 
         #endregion
 
         #region Private Method
+
+        private bool CheckFile(string file)
+        {
+            if (file == "")
+            {
+                MessageBox.Show($"Please set all the file path!");
+                return false;
+            }
+
+            if (!File.Exists(file))
+            {
+                MessageBox.Show($"Cannot find {file}!");
+                return false;
+            }
+
+            return true;
+        }
 
         private void ExecutCmdProcess(string cmd)
         {
@@ -200,13 +231,18 @@ namespace VideoCutter
                 CommandProcess.StartInfo.Arguments = "/c " + cmd;
                 CommandProcess.StartInfo.RedirectStandardInput = false;  // 重定向输入    
                 CommandProcess.StartInfo.RedirectStandardOutput = false; // 重定向标准输出    
-                CommandProcess.StartInfo.RedirectStandardError = false;  // 重定向错误输出  
+                CommandProcess.StartInfo.RedirectStandardError = true;  // 重定向错误输出  
                 CommandProcess.StartInfo.UseShellExecute = false;
-                CommandProcess.StartInfo.CreateNoWindow = IsShowCmdWnd ? false : true;
+                CommandProcess.StartInfo.CreateNoWindow = true;
 
                 try
                 {
+                    CommandProcess.ErrorDataReceived += new DataReceivedEventHandler(HandleErrorDataReceived);
                     CommandProcess.Start();
+                    CommandProcess.BeginErrorReadLine();
+                    //CommandProcess.WaitForExit();//等待程序执行完退出进程
+                    //progressBar2.Value = progressBar2.Maximum;
+                    //CommandProcess.Close();
                 }
                 catch (Exception)
                 {
@@ -215,37 +251,46 @@ namespace VideoCutter
             }
         }
 
-        private bool IsPathCorrect(string path)
+        private void HandleErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            bool flag = false;
-
-            if (string.IsNullOrEmpty(path))
+            lock(sender)
             {
-                MessageBox.Show("File path is null or empty!");
-            }
-            else
-            {
-                flag = true;
-            }
+                if (String.IsNullOrEmpty(e.Data))
+                {
+                    return;
+                }
+                
+                this.BeginInvoke(new Action(() =>
+                {
+                    TxtLog.AppendText(e.Data + "\r\n");
+                }));
 
-            return flag;
-        }
+                var index = e.Data.LastIndexOf("time=");
+                if (index == -1)
+                {
+                    return;
+                }
+                var timeTemp = e.Data.Substring(index + 5, 11);
+                var time = DateTime.Parse(timeTemp);
+                var second = time.Hour * 3600 + time.Minute * 60 + time.Second;
 
-        private bool IsTimeStringCorrect(string time)
-        {
-            bool flag = false;
-            DateTime temp;
-
-            if (!DateTime.TryParse(time, out temp))
-            {
-                MessageBox.Show(string.Format($"{temp} cannot transform to DateTime!"));
+                this.BeginInvoke(new Action(() =>
+                {
+                    if (second >= progressBar2.Maximum)
+                    {
+                        progressBar2.Value = progressBar2.Maximum;
+                    }
+                    else
+                    {
+                        progressBar2.Value = second;
+                    }
+                    if (e.Data.LastIndexOf("overhead") != -1)
+                    {
+                        progressBar2.Value = progressBar2.Maximum;
+                    }
+                    progressBar2.Update();
+                }));
             }
-            else
-            {
-                flag = true;
-            }
-
-            return flag;
         }
 
         #endregion

@@ -16,3 +16,12 @@ E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\obj\Debug\VideoCutter.csproj
 E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\obj\Debug\VideoCutter.csproj.CoreCompileInputs.cache
 E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\obj\Debug\VideoCutter.exe
 E:\OneDrive\Projects\Csharp\VideoCutter\VideoCutter\obj\Debug\VideoCutter.pdb
+C:\Users\zdfffg\Documents\GitHub\VideoCutter\VideoCutter\bin\Debug\VideoCutter.exe.config
+C:\Users\zdfffg\Documents\GitHub\VideoCutter\VideoCutter\bin\Debug\VideoCutter.exe
+C:\Users\zdfffg\Documents\GitHub\VideoCutter\VideoCutter\bin\Debug\VideoCutter.pdb
+C:\Users\zdfffg\Documents\GitHub\VideoCutter\VideoCutter\obj\Debug\VideoCutter.Form1.resources
+C:\Users\zdfffg\Documents\GitHub\VideoCutter\VideoCutter\obj\Debug\VideoCutter.Properties.Resources.resources
+C:\Users\zdfffg\Documents\GitHub\VideoCutter\VideoCutter\obj\Debug\VideoCutter.csproj.GenerateResource.cache
+C:\Users\zdfffg\Documents\GitHub\VideoCutter\VideoCutter\obj\Debug\VideoCutter.csproj.CoreCompileInputs.cache
+C:\Users\zdfffg\Documents\GitHub\VideoCutter\VideoCutter\obj\Debug\VideoCutter.exe
+C:\Users\zdfffg\Documents\GitHub\VideoCutter\VideoCutter\obj\Debug\VideoCutter.pdb
