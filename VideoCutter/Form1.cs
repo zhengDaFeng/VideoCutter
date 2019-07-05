@@ -92,6 +92,12 @@ namespace VideoCutter
                 return;
             }
 
+            if (TxtFfmpegFile.Text.IndexOf("ffmpeg.exe") == -1)
+            {
+                MessageBox.Show("ffmpeg file path is wrong!");
+                return;
+            }
+
             DateTime startTime = DateTime.Parse($"{NudStartHour.Value.ToString("00")}:" +
                 $"{NudStartMinute.Value.ToString("00")}:{NudStartSecond.Value.ToString("00")}");
             DateTime endTime = DateTime.Parse($"{NudEndHour.Value.ToString("00")}:" +
@@ -103,8 +109,6 @@ namespace VideoCutter
                 MessageBox.Show("End-time must be bigger than start-time!");
                 return;
             }
-
-            progressBar2.Maximum = (int)spanTime.TotalSeconds;
 
             var start = startTime.ToString("HH:mm:ss");
             var span = spanTime.ToString();
@@ -196,8 +200,6 @@ namespace VideoCutter
                 throw;
             }
 
-            progressBar2.Maximum = 200;
-
             var cmd = string.Format($"{TxtFfmpegFile.Text} -f concat -safe 0 -i {listfile} -c copy {TxtMergeOutputFile.Text}");
             ExecutCmdProcess(cmd);
         }
@@ -253,44 +255,15 @@ namespace VideoCutter
 
         private void HandleErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            lock(sender)
+            if (String.IsNullOrEmpty(e.Data))
             {
-                if (String.IsNullOrEmpty(e.Data))
-                {
-                    return;
-                }
-                
-                this.BeginInvoke(new Action(() =>
-                {
-                    TxtLog.AppendText(e.Data + "\r\n");
-                }));
-
-                var index = e.Data.LastIndexOf("time=");
-                if (index == -1)
-                {
-                    return;
-                }
-                var timeTemp = e.Data.Substring(index + 5, 11);
-                var time = DateTime.Parse(timeTemp);
-                var second = time.Hour * 3600 + time.Minute * 60 + time.Second;
-
-                this.BeginInvoke(new Action(() =>
-                {
-                    if (second >= progressBar2.Maximum)
-                    {
-                        progressBar2.Value = progressBar2.Maximum;
-                    }
-                    else
-                    {
-                        progressBar2.Value = second;
-                    }
-                    if (e.Data.LastIndexOf("overhead") != -1)
-                    {
-                        progressBar2.Value = progressBar2.Maximum;
-                    }
-                    progressBar2.Update();
-                }));
+                return;
             }
+
+            this.BeginInvoke(new Action(() =>
+            {
+                TxtLog.AppendText(e.Data + "\r\n");
+            }));
         }
 
         #endregion

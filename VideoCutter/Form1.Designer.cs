@@ -61,7 +61,6 @@
             this.TxtMergeOutputFile = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.TxtMergeInputFile = new System.Windows.Forms.TextBox();
-            this.progressBar2 = new System.Windows.Forms.ProgressBar();
             this.TxtLog = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tabControl1.SuspendLayout();
@@ -505,16 +504,6 @@
             this.TxtMergeInputFile.TabStop = false;
             this.TxtMergeInputFile.WordWrap = false;
             // 
-            // progressBar2
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.progressBar2, 3);
-            this.progressBar2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.progressBar2.Location = new System.Drawing.Point(4, 657);
-            this.progressBar2.Margin = new System.Windows.Forms.Padding(4);
-            this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(627, 34);
-            this.progressBar2.TabIndex = 25;
-            // 
             // TxtLog
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.TxtLog, 3);
@@ -523,7 +512,7 @@
             this.TxtLog.Multiline = true;
             this.TxtLog.Name = "TxtLog";
             this.TxtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.TxtLog.Size = new System.Drawing.Size(629, 295);
+            this.TxtLog.Size = new System.Drawing.Size(629, 337);
             this.TxtLog.TabIndex = 26;
             this.TxtLog.WordWrap = false;
             // 
@@ -536,7 +525,6 @@
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.TxtLog, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.TxtFfmpegFile, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.progressBar2, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.BtnBrowseFfmpeg, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.tabControl1, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -607,7 +595,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.ProgressBar progressBar2;
         private System.Windows.Forms.Button BtnMergeVideo;
         private System.Windows.Forms.Button BtnMergeAddInput;
         private System.Windows.Forms.Label label12;
