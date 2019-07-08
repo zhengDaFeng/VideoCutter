@@ -55,6 +55,8 @@ namespace VideoCutter
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     TxtClipInputFile.Text = openFileDialog.FileName;
+                    var nameOld = Path.GetFileNameWithoutExtension(TxtClipInputFile.Text);
+                    TxtClipOutputFile.Text = TxtClipInputFile.Text.Replace(nameOld, nameOld + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "_clip");
                 }
             }
         }
@@ -73,7 +75,7 @@ namespace VideoCutter
                 {
                     var folder = folderBrowserDialog.SelectedPath;
                     var nameOld = Path.GetFileNameWithoutExtension(TxtClipInputFile.Text);
-                    var nameNew = TxtClipInputFile.Text.Replace(nameOld, nameOld + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "_clip");
+                    var nameNew = nameOld + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "_clip.mp4";
                     TxtClipOutputFile.Text = Path.Combine(folder, nameNew);
                 }
             }
@@ -132,6 +134,9 @@ namespace VideoCutter
                         TxtMergeInputFile.Text += item;
                         TxtMergeInputFile.Text += ";\r\n";
                     }
+                    var first = TxtMergeInputFile.Text.Replace("\r\n", "").Split(';')[0];
+                    var nameOld = Path.GetFileNameWithoutExtension(first);
+                    TxtMergeOutputFile.Text = first.Replace(nameOld, nameOld + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "_merge");
                 }
             }
         }
@@ -162,7 +167,7 @@ namespace VideoCutter
                     var folder = folderBrowserDialog.SelectedPath;
                     var first = TxtMergeInputFile.Text.Replace("\r\n", "").Split(';')[0];
                     var nameOld = Path.GetFileNameWithoutExtension(first);
-                    var nameNew = first.Replace(nameOld, nameOld + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "_merge");
+                    var nameNew = nameOld + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "_merge.mp4";
                     TxtMergeOutputFile.Text = Path.Combine(folder, nameNew);
                 }
             }
